@@ -2,7 +2,7 @@ const express = require('express');
 const usersRouter = express.Router();
 const chalk = require('chalk');
 const path = require('path');
-const { getAllUsers, createUser, getUserById, updateUser } = require('../db');
+const { getAllUsers, createUser, getUserById, updateUser, deleteUser } = require('../db');
 
 
 

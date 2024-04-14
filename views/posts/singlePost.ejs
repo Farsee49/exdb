@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer type="text/javascript" src="singPost.js"></script>
+    <title>Single Post</title>
+</head>
+<body>
+    <h1>Post</h1>
+    <a href="/api/posts">Posts</a>
+    <h2><%= post.title %></h2>
+    <p><%= post.body %></p>
+    <a href="/api/posts/<%= post.id %>/comments">View Comments</a>
+    <a href="/api/posts/<%= post.id %>/comments/new">Add Comment</a>
+    <a href="/api/posts/<%= post.id %>/edit">Edit Post</a>
+    <form method="POST" action="/api/posts/<%= post.id %>?_method=DELETE">
+        <button>Delete</button>
+    </form> 
+  
+   
+  
+</body>
+</html>

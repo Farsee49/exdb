@@ -37,13 +37,13 @@ async function createTables() {
             username VARCHAR(255) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
-            location VARCHAR(255) NOT NULL
+            location VARCHAR(255) NOT NULL,
+            active BOOLEAN DEFAULT true
         );
         CREATE TABLE posts (
             id SERIAL PRIMARY KEY,
-            "authorId" INTEGER REFERENCES users(id) NOT NULL,
-            title VARCHAR(255) NOT NULL,
-            content TEXT NOT NULL,
+            title VARCHAR(255) ,
+            content TEXT ,
             active BOOLEAN DEFAULT true
         );
         `);
@@ -90,17 +90,17 @@ async function createInitialPosts() {
         console.log('Starting to create posts...');
 
         await createPost({
-            authorId: tammy.id,
+          
             title: 'How to make the perfect sandwich',
             content: 'Doesn\'t it seem like a lot of people have forgotten how to make a good sandwich?'
         });
         await createPost({
-            authorId: pete.id,
+            
             title: 'So you like football?',
             content: 'I think football is a pretty cool game'
         });
         await createPost({
-            authorId: bob.id,
+           
             title: 'Best Places to Fish',
             content: 'I have been thinking about going fishing for a while now'
         });

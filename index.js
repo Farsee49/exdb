@@ -26,6 +26,7 @@ server.use(morgan('dev'));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(methodOverride('_method'));
+server.use(bodyParser.urlencoded({ extended: false }))
 
 // server.use('*', (req, res, next) => {
 //     console.log(chalk.redBright("Request for API: GRANTED"));

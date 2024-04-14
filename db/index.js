@@ -1,20 +1,25 @@
+const { get } = require('http');
 const { Client } = require('pg');
 
-const client = new Client('postgres://localhost:5432/post3');
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/post3'; 
+
+const client = new Client({ connectionString});
 
 async function createUser({
     username,
     password,
     name,
-    location
+    location,
+    active = true
      }) {
         try {
             const {rows: [user]} = await client.query(`
-            INSERT INTO users(username, password, name, location)
-                VALUES($1, $2, $3, $4)
+            INSERT INTO users(username, password, 
+                name, location, active)
+                VALUES($1, $2, $3, $4, $5)
                 ON CONFLICT (username) DO NOTHING
             RETURNING*;
-            `,[username, password, name, location]);
+            `,[username, password, name, location, active]);
             return user;
                 } catch (error){
                     throw error,
@@ -48,7 +53,7 @@ async function updateUser(id, fields = {}) {
 async function getUserById(userId) {
     try{
         const { rows: [user] } = await client.query(`
-        SELECT id, username, name, location
+        SELECT id, username, name, location, active
         FROM users
         WHERE id=${userId};
         `);
@@ -75,19 +80,33 @@ async function getAllUsers() {
         throw error;
         console.error(`Error getting users: ${error}`);
     }
-}
+};
+
+async function deleteUser(userId) {
+    try {
+        await client.query(`
+        DELETE FROM users
+        WHERE id=${userId};
+        `);
+    } catch (error) {
+        throw error;
+        console.error(`Error deleting user: ${error}`);
+    }
+};
+
 
 async function createPost({
     authorId,
     title,
-    content
+    content,
+    active = true
 }) {
     try {
         const { rows: [post] } = await client.query(`
-        INSERT INTO posts("authorId", title, content)
+        INSERT INTO posts( title, content, active)
         VALUES($1, $2, $3)
         RETURNING*;
-        `, [authorId, title, content]);
+        `, [title, content, active]);
         return post;
     } catch (error) {
         throw error;
@@ -143,6 +162,38 @@ async function getPostsByUser(userId) {
     }
 }
 
+async function getPostById(postId) {
+    try {
+        const { rows: [post] } = await client.query(`
+        SELECT *
+        FROM posts
+        WHERE id=${postId};
+        `);
+        if (!post) {
+            throw {
+                name: "PostNotFoundError",
+                message: "Could not find a post with that postId"
+            }
+        }
+        return post;
+    } catch (error) {
+        throw error;
+        console.error(`Error getting post by ID: ${error}`);
+    }
+};
+
+async function deletePost(postId) {
+    try {
+        await client.query(`
+        DELETE FROM posts
+        WHERE id=${postId};
+        `);
+    } catch (error) {
+        throw error;
+        console.error(`Error deleting post: ${error}`);
+    }
+};
+
 
 module.exports = {
     client,
@@ -153,7 +204,10 @@ module.exports = {
     createPost,
     updatePost,
     getAllPosts,
-    getPostsByUser
+    getPostsByUser,
+    getPostById,
+    deletePost,
+    deleteUser
 };
 
 

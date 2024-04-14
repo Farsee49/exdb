@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post</title>
+</head>
+<body>
+    <h1>Create A Post</h1>
+    <a href="/api/posts">Posts</a>
+    <form action="/api/posts" method="post">
+        <section>
+            <label for="title">Enter Title:</label>
+            <input type="text" id="title" placeholder="title" name="title">
+        </section>
+        <section>
+            <label for="content">Post Text</label>
+            <br>
+            <textarea id="content" cols="30" rows="5" name="content"></textarea>
+        </section>
+        <button>Submit</button>
+    </form>
+    
+</body>
+</html>
